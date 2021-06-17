@@ -5,21 +5,22 @@ using UnityEngine;
 [RequireComponent(typeof(Animator), typeof(PlayerMover))]
 public class PlayerAnimator : MonoBehaviour
 {
-    [SerializeField] private PlayerMover _mover;
+    private PlayerMover _movement;
     private Animator _animator;
 
-    private void Start()
+    private void Awake()
     {
-        _animator = GetComponent<Animator>();        
+        _animator = GetComponent<Animator>();
+        _movement = GetComponent<PlayerMover>();
     }
     private void OnEnable() 
     {
-        _mover.SpeedChanged += OnSpeedChanged;
+        _movement.SpeedChanged += OnSpeedChanged;
     }
 
     private void OnDisable() 
     {
-        _mover.SpeedChanged -= OnSpeedChanged;
+        _movement.SpeedChanged -= OnSpeedChanged;
     }
 
     private void OnSpeedChanged(float speed)

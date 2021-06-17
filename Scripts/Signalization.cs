@@ -9,6 +9,8 @@ public class Signalization : MonoBehaviour
 {
     private AudioSource _soundtrack;
     private float _respond = 0.5f;
+    private Coroutine _volumeOn;
+    private Coroutine _volumeOff;
 
     private void Start()
     {
@@ -21,8 +23,11 @@ public class Signalization : MonoBehaviour
         if (collision.TryGetComponent<PlayerMover>(out PlayerMover player))
         {
             _soundtrack.Play();
-            StopCoroutine(ChangeVolume(false));
-            StartCoroutine(ChangeVolume(true));
+
+            if (_volumeOff != null)            
+                StopCoroutine(_volumeOff);            
+
+            _volumeOn = StartCoroutine(ChangeVolume(true));
         }
     }
 
@@ -30,30 +35,36 @@ public class Signalization : MonoBehaviour
     {
         if (collision.TryGetComponent<PlayerMover>(out PlayerMover player))
         {
-            StopCoroutine(ChangeVolume(true));
-            StartCoroutine(ChangeVolume(false));
+            if (_volumeOn != null)            
+                StopCoroutine(_volumeOn);            
+
+            _volumeOff = StartCoroutine(ChangeVolume(false));
         }
     }
 
 
     private IEnumerator ChangeVolume(bool alert)
     {
+        int minMaxVolume;
+        float deltaVolume = Mathf.Lerp(0, 1, Time.deltaTime * _respond);
+
         if (alert)
-        {
-            while (_soundtrack.volume != 1)
-            {
-                _soundtrack.volume += Mathf.Lerp(0, 1, Time.deltaTime * _respond);
-                yield return null;
-            }
+        {            
+            minMaxVolume = 1;
         }
         else
         {
-            while (_soundtrack.volume != 0)
-            {
-                _soundtrack.volume -= Mathf.Lerp(0, 1, Time.deltaTime * _respond);
-                yield return null;
-            }
-            _soundtrack.Pause();
+            deltaVolume = -deltaVolume;
+            minMaxVolume = 0;
         }
+        
+        while (_soundtrack.volume != minMaxVolume)
+        {
+            _soundtrack.volume += deltaVolume;
+            yield return null;
+        }
+
+        if (_soundtrack.volume == 0)
+            _soundtrack.Stop();
     }
 }
