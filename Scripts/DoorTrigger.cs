@@ -6,6 +6,8 @@ using System.Linq;
 public class DoorTrigger : MonoBehaviour
 {    
     private Animation _animation;
+    private const string _animDoorOpen = "DoorOpen";
+    private const string _animDoorClose = "DoorClose";
 
     private void Start() 
     {
@@ -15,13 +17,13 @@ public class DoorTrigger : MonoBehaviour
      private void OnTriggerEnter(Collider collision) 
      {         
          if (collision.TryGetComponent<PlayerMover>(out PlayerMover player))         
-             Animate("DoorOpen");
+             Animate(_animDoorOpen);
      }
 
     private void OnTriggerExit(Collider collision) 
     {
         if (collision.TryGetComponent<PlayerMover>(out PlayerMover player))        
-            Animate("DoorClose"); 
+            Animate(_animDoorClose); 
     }
 
     private void Animate(string name) 

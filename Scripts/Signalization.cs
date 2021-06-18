@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(BoxCollider), typeof(AudioSource))]
-
 public class Signalization : MonoBehaviour
 {
     private AudioSource _soundtrack;
@@ -41,7 +40,6 @@ public class Signalization : MonoBehaviour
             _volumeOff = StartCoroutine(ChangeVolume(false));
         }
     }
-
 
     private IEnumerator ChangeVolume(bool alert)
     {

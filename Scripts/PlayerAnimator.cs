@@ -13,6 +13,7 @@ public class PlayerAnimator : MonoBehaviour
         _animator = GetComponent<Animator>();
         _movement = GetComponent<PlayerMover>();
     }
+
     private void OnEnable() 
     {
         _movement.SpeedChanged += OnSpeedChanged;
